@@ -2,13 +2,7 @@
 import { Database } from '@/supabase-types';
 import { createBrowserClient } from '@supabase/ssr'
 import Link from "next/link";
-
-
-type Status = Database['public']['Tables']['properties']['Row']['status']
-
-function StatusFilter({ status, children, statusFilter }: { status: Status, children: any, statusFilter?: Status }) {
-  return <Link href={`?status=${status}`} className={statusFilter === status ? 'font-bold' : ''}>{children}</Link>
-}
+import { StatusFilter, Status } from './StatusFilter';
 
 export default async function Home({ searchParams }: { searchParams: { status?: Status } }) {
   const statusFilter = (await searchParams).status
@@ -36,9 +30,9 @@ export default async function Home({ searchParams }: { searchParams: { status?: 
       <h1 className="font-bold text-xl">Properties Page</h1>
 
       <div className='flex gap-1'>
-        <StatusFilter status='published' statusFilter={statusFilter}>Published</StatusFilter>
-        <StatusFilter status='archived' statusFilter={statusFilter}>Archived</StatusFilter>
-        <StatusFilter status='draft' statusFilter={statusFilter}>Draft</StatusFilter>
+        <StatusFilter status='published'>Published</StatusFilter>
+        <StatusFilter status='archived'>Archived</StatusFilter>
+        <StatusFilter status='draft'>Draft</StatusFilter>
       </div>
 
       <div className="flex flex-col gap-1">
