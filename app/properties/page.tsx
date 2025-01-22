@@ -5,7 +5,7 @@ import Link from "next/link";
 import { StatusFilter, Status } from './StatusFilter';
 
 export default async function Home({ searchParams }: { searchParams: { status?: Status } }) {
-  const statusFilter = (await searchParams).status
+  const statusFilter = (await searchParams).status?.split(',') as Status[];
 
   const supabase = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,8 +18,7 @@ export default async function Home({ searchParams }: { searchParams: { status?: 
       *,
       property_images ( key, placeholder )
     `)
-    .eq('status', statusFilter || 'published')
-    ;
+    .in('status', statusFilter || ['published']);
 
   if (error) {
     console.error('Error fetching properties:', error);
